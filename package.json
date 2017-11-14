@@ -1,0 +1,17 @@
+{
+  "name": "fiit-pdt",
+  "version": "1.0.0",
+  "description": "Project for Advanced database system class",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matus Cuper",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  },
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
