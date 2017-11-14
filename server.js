@@ -18,11 +18,16 @@ client.connect();
 
 
 router.use(function(req, res, next) {
-	console.log('Something is happening.');
+	console.log('Handler for every request.');
 	next();
 });
 
-router.get('/', (req, res) => res.json({ message: 'API state is OK!' }));
+router.use('/', function(req, res, next) {
+	console.log('Accessing root route');
+	res.json({ message: 'Accessing root route, API state is OK! Visit one of following',
+						 possibilities: ['hotels', 'pubs', 'restaurants'] })
+	next();
+});
 
 router.route('/points')
 	.post(function(req, res) {
