@@ -1,15 +1,21 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const morgan = require('morgan');
+const pg = require('pg');
 
+const connectionString = process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:54321/gis';
 const port = process.env.PORT || 3000;
 
 const app = express();
+const client = new pg.Client(connectionString);
 const router = require('./api');
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+client.connect();
+app.set('client', client);
 
 
 app.use(function(req, res, next) {
