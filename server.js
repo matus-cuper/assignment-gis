@@ -7,15 +7,16 @@ const connectionString = process.env.DATABASE_URL || 'postgres://postgres:postgr
 const port = process.env.PORT || 3000;
 
 const app = express();
-const client = new pg.Client(connectionString);
+const pool = new pg.Pool({
+	connectionString: connectionString
+});
 const router = require('./api');
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-client.connect();
-app.set('client', client);
+app.set('pool', pool);
 
 
 app.use(function(req, res, next) {
