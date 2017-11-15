@@ -16,10 +16,10 @@ router.get('/', function(req, res, next) {
 
 module.exports = router;
 
-// const paths = require('./paths');
+const paths = require('./paths');
 const points = require('./points');
-// const rectangles = require('./rectangles');
+const rectangles = require('./rectangles');
 
-// router.use('/paths', paths);
+router.use('/paths', paths);
 router.use('/points', points);
-// router.use('/rectangles', rectangles);
+router.use('/rectangles', rectangles);
