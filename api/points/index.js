@@ -2,33 +2,30 @@ const express = require('express');
 const fs = require('fs');
 const router = express.Router();
 
-var sqlQuery = fs.readFileSync('queries/amen-test.sql').toString();
+var sqlQuery = fs.readFileSync('queries/points.sql').toString();
 
 
 router.get('/', function(req, res, next) {
   console.log('Accessing /api/points');
   console.log(sqlQuery);
+
   const pool = req.app.get('pool');
+  const distance = (req.query.distance) ? req.query.distance:999999
+  const limit = (req.query.limit) ? req.query.limit:9999
 
   pool.connect((err, client, done) => {
     if (err) throw err;
-    client.query(sqlQuery, ['guest_house'], (err, result) => {
+    client.query(sqlQuery, [req.query.lon, req.query.lat,
+      req.query.amenity[0], req.query.amenity[1], req.query.amenity[2],
+      distance, limit], (err, result) => {
       done();
-      console.log('Returned ' + result.rowCount + ' rows');
 
-      var lat = req.query.lat;
-      var lon = req.query.lon;
-      var i, j;
-      for (j in req.query) {
-        if (Array.isArray(req.query[j])) {
-          for (i in req.query[j]) {
-            console.log(j + ' ' + req.query[j][i]);
-          }
-        }
-        else {
-          console.log(j + ' ' + req.query[j]);
-        }
-      }
+      console.log('lon        ' + req.query.lon);
+      console.log('lat        ' + req.query.lat);
+      console.log('amenities  ' + req.query.amenity);
+      console.log('distance   ' + distance);
+      console.log('limit      ' + limit);
+      console.log('Returned   ' + result.rowCount + ' rows');
 
       var i;
       var r = [];

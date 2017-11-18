@@ -2,7 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const router = express.Router();
 
-var sqlQuery = fs.readFileSync('queries/amen-test.sql').toString();
+var sqlQuery = fs.readFileSync('queries/amenities.sql').toString();
 
 
 router.get('/', function(req, res, next) {
