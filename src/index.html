@@ -31,12 +31,12 @@
 
     <form>
       Distance (between 1 and 999 999):
-      <input type="number" name="distance" min="1" max="999999">
+      <input type="number" name="distance" id="param-distance" min="1" max="999999">
     </form>
 
     <form>
       Limit (between 1 and 9 999):
-      <input type="number" name="limit" min="1" max="9999">
+      <input type="number" name="limit" id="param-limit" min="1" max="9999">
     </form>
 
     <script>
@@ -59,15 +59,25 @@
       var getAmenities = function() {
         var tmp = '';
         if (document.getElementById('et-bars').checked) {
-          tmp += 'amenity[]=bars';
+          tmp += '&amenity[]=bars';
         }
         if (document.getElementById('et-hotels').checked) {
-          if (tmp != '') tmp += '&';
-          tmp += 'amenity[]=hotels';
+          tmp += '&amenity[]=hotels';
         }
         if (document.getElementById('et-restaurants').checked) {
-          if (tmp != '') tmp += '&';
-          tmp += 'amenity[]=restaurants';
+          tmp += '&amenity[]=restaurants';
+        }
+
+        return tmp;
+      };
+
+      var getParams = function() {
+        var tmp = '';
+        if (!isNaN(parseInt(document.getElementById('param-distance').value))) {
+          tmp += ('&distance=' + parseInt(document.getElementById('param-distance').value));
+        }
+        if (!isNaN(parseInt(document.getElementById('param-limit').value))) {
+          tmp += ('&limit=' + parseInt(document.getElementById('param-limit').value));
         }
 
         return tmp;
@@ -94,12 +104,14 @@
         if (document.getElementById('uc-points').checked) {
           var amenities = getAmenities();
           if (amenities != '') {
-            getJSON('http://127.0.0.1:3000/api/points?' + amenities + '&lon=' + e.latlng['lng'] + '&lat=' + e.latlng['lat'] + '&distance=40&limit=5',
+            var request = 'http://127.0.0.1:3000/api/points?' + amenities + '&lon=' + e.latlng['lng'] + '&lat=' + e.latlng['lat'] + getParams();
+            getJSON(request,
             function(err, data) {
               if (err !== null) {
                 console.log('Error occurred during getting response from nodejs: ' + err);
               } else {
-                console.log(data.length);
+                console.log('Request sent to backend ' + request);
+                console.log('Fetched ' + data.length + ' objects');
                 for (d in data) {
                   console.log(data[d]);
                 }
