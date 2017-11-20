@@ -1,3 +1,4 @@
+const cors = require('cors');
 const express = require('express');
 const router = express.Router();
 
@@ -20,6 +21,7 @@ const paths = require('./paths');
 const points = require('./points');
 const rectangles = require('./rectangles');
 
+router.use(cors())
 router.use('/paths', paths);
 router.use('/points', points);
 router.use('/rectangles', rectangles);
