@@ -80,7 +80,19 @@
           tmp += ('&limit=' + parseInt(document.getElementById('param-limit').value));
         }
 
+        if (tmp == '')
+          return '&limit=10';
         return tmp;
+      };
+
+      var setupMarker = function(data) {
+        var marker = L.marker([data['lat'], data['lon']]);
+        var t = '<dl><dt><b>Name:     </b> ' + data['name'] + '</dt>'
+                  + '<dt><b>Category: </b> ' + data['category'] + '</dt>'
+                  + '<dt><b>Amenity:  </b> ' + data['amenity'] + '</dt></dl>'
+
+        marker.bindTooltip(t).openTooltip();
+        return marker;
       };
 
 
@@ -92,12 +104,9 @@
         accessToken: 'pk.eyJ1IjoiY3VwbyIsImEiOiJjajhibW9pczQwc3M0MnFwOGo3dDFncWwzIn0.VlG1EafnmV5KoZFf_1EUBQ'
       }).addTo(mymap);
 
-      // var marker = L.marker([48.1475101711469, 17.1106751964688]).addTo(mymap);
-
-
-
 
       var popup = L.popup();
+      var markers = L.layerGroup().addTo(mymap);
 
       function onMapClick(e) {
 
@@ -110,17 +119,26 @@
               if (err !== null) {
                 console.log('Error occurred during getting response from nodejs: ' + err);
               } else {
+                markers.clearLayers();
+
+                if (parseInt(document.getElementById('param-distance').value)) {
+                  L.circle([e.latlng['lat'], e.latlng['lng']], {
+                    color: 'yellow',
+                    fillColor: '#ff0',
+                    fillOpacity: 0.2,
+                    radius: parseInt(document.getElementById('param-distance').value)
+                  }).addTo(markers);
+                }
+
                 console.log('Request sent to backend ' + request);
                 console.log('Fetched ' + data.length + ' objects');
                 for (d in data) {
+                  setupMarker(data[d]).addTo(markers);
                   console.log(data[d]);
                 }
               }
             });
           }
-
-
-
         }
         else if (document.getElementById('uc-rectangles').checked) {
           console.log('uc-rectangles');
@@ -128,14 +146,6 @@
         else if (document.getElementById('uc-paths').checked) {
           console.log('uc-paths');
         }
-
-
-
-
-        popup
-          .setLatLng(e.latlng)
-          .setContent("You clicked the map at " + e.latlng.toString())
-          .openOn(mymap);
       };
 
       mymap.on('click', onMapClick);
