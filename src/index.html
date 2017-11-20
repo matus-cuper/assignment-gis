@@ -18,15 +18,15 @@
     <div id="mapid"></div>
 
     <form action="">
-      <input type="radio" id="usecase1" name="usecase" value="uc1">Points</input>
-      <input type="radio" id="usecase2" name="usecase" value="uc2">Rectangles</input>
-      <input type="radio" id="usecase3" name="usecase" value="uc3">Paths</input>
+      <input type="radio" name="use-case" id="uc-points">Points</input>
+      <input type="radio" name="use-case" id="uc-rectangles">Rectangles</input>
+      <input type="radio" name="use-case" id="uc-paths">Paths</input>
     </form>
 
     <div class="checkbox-group required">
-      <input type="checkbox" name="entity" value="bars">Bars</input>
-      <input type="checkbox" name="entity" value="hotels">Hotels</input>
-      <input type="checkbox" name="entity" value="restaurants">Restaurants</input>
+      <input type="checkbox" name="entity-type" id="et-bars">Bars</input>
+      <input type="checkbox" name="entity-type" id="et-hotels">Hotels</input>
+      <input type="checkbox" name="entity-type" id="et-restaurants">Restaurants</input>
     </div>
 
     <form>
@@ -40,16 +40,6 @@
     </form>
 
     <script>
-      var mymap = L.map('mapid').setView([48.1472665, 17.1088840], 15);
-      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-        maxZoom: 18,
-        id: 'mapbox.streets',
-        accessToken: 'pk.eyJ1IjoiY3VwbyIsImEiOiJjajhibW9pczQwc3M0MnFwOGo3dDFncWwzIn0.VlG1EafnmV5KoZFf_1EUBQ'
-      }).addTo(mymap);
-
-      // var marker = L.marker([48.1475101711469, 17.1106751964688]).addTo(mymap);
-
       var getJSON = function(url, callback) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
@@ -66,20 +56,69 @@
         xhr.send();
       };
 
+      var getAmenities = function() {
+        var tmp = '';
+        if (document.getElementById('et-bars').checked) {
+          tmp += 'amenity[]=bars';
+        }
+        if (document.getElementById('et-hotels').checked) {
+          if (tmp != '') tmp += '&';
+          tmp += 'amenity[]=hotels';
+        }
+        if (document.getElementById('et-restaurants').checked) {
+          if (tmp != '') tmp += '&';
+          tmp += 'amenity[]=restaurants';
+        }
+
+        return tmp;
+      };
+
+
+      var mymap = L.map('mapid').setView([48.1472665, 17.1088840], 15);
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox.streets',
+        accessToken: 'pk.eyJ1IjoiY3VwbyIsImEiOiJjajhibW9pczQwc3M0MnFwOGo3dDFncWwzIn0.VlG1EafnmV5KoZFf_1EUBQ'
+      }).addTo(mymap);
+
+      // var marker = L.marker([48.1475101711469, 17.1106751964688]).addTo(mymap);
+
+
+
 
       var popup = L.popup();
 
       function onMapClick(e) {
-        getJSON('http://127.0.0.1:3000/api/points?amenity[]=hotels&amenity[]=bars&lon=' + e.latlng['lng'] + '&lat=' + e.latlng['lat'] + '&distance=40&limit=5',
-        function(err, data) {
-          if (err !== null) {
-            console.log('Error occurred during getting response from nodejs: ' + err);
-          } else {
-            for (d in data) {
-              console.log(data[d]);
-            }
+
+        if (document.getElementById('uc-points').checked) {
+          var amenities = getAmenities();
+          if (amenities != '') {
+            getJSON('http://127.0.0.1:3000/api/points?' + amenities + '&lon=' + e.latlng['lng'] + '&lat=' + e.latlng['lat'] + '&distance=40&limit=5',
+            function(err, data) {
+              if (err !== null) {
+                console.log('Error occurred during getting response from nodejs: ' + err);
+              } else {
+                console.log(data.length);
+                for (d in data) {
+                  console.log(data[d]);
+                }
+              }
+            });
           }
-        });
+
+
+
+        }
+        else if (document.getElementById('uc-rectangles').checked) {
+          console.log('uc-rectangles');
+        }
+        else if (document.getElementById('uc-paths').checked) {
+          console.log('uc-paths');
+        }
+
+
+
 
         popup
           .setLatLng(e.latlng)
