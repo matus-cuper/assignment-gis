@@ -17,6 +17,28 @@
 
     <div id="mapid"></div>
 
+    <form action="">
+      <input type="radio" id="usecase1" name="usecase" value="uc1">Points</input>
+      <input type="radio" id="usecase2" name="usecase" value="uc2">Rectangles</input>
+      <input type="radio" id="usecase3" name="usecase" value="uc3">Paths</input>
+    </form>
+
+    <div class="checkbox-group required">
+      <input type="checkbox" name="entity" value="bars">Bars</input>
+      <input type="checkbox" name="entity" value="hotels">Hotels</input>
+      <input type="checkbox" name="entity" value="restaurants">Restaurants</input>
+    </div>
+
+    <form>
+      Distance (between 1 and 999 999):
+      <input type="number" name="distance" min="1" max="999999">
+    </form>
+
+    <form>
+      Limit (between 1 and 9 999):
+      <input type="number" name="limit" min="1" max="9999">
+    </form>
+
     <script>
       var mymap = L.map('mapid').setView([48.1472665, 17.1088840], 15);
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
