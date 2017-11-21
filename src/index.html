@@ -105,8 +105,9 @@
       }).addTo(mymap);
 
 
-      var popup = L.popup();
+      var coordinates = [];
       var markers = L.layerGroup().addTo(mymap);
+      var popup = L.popup();
 
       function onMapClick(e) {
 
@@ -141,7 +142,40 @@
           }
         }
         else if (document.getElementById('uc-rectangles').checked) {
-          console.log('uc-rectangles');
+          if (coordinates.length > 2) coordinates = [];
+          coordinates.push(e.latlng['lat'], e.latlng['lng']);
+          console.log(coordinates);
+          var amenities = getAmenities();
+          if (amenities != '' && coordinates.length > 2) {
+            {
+              var request = 'http://127.0.0.1:3000/api/rectangles?' + amenities + '&lat[]=' + coordinates[0] + '&lon[]=' + coordinates[1] + '&lat[]=' + coordinates[2] + '&lon[]=' + coordinates[3] + getParams();
+              getJSON(request,
+              function(err, data) {
+                if (err !== null) {
+                  console.log('Error occurred during getting response from nodejs: ' + err);
+                } else {
+                  markers.clearLayers();
+                  L.polygon([
+                    [coordinates[0], coordinates[1]],
+                    [coordinates[0], coordinates[3]],
+                    [coordinates[2], coordinates[3]],
+                    [coordinates[2], coordinates[1]]
+                  ], {
+                    color: 'yellow',
+                    fillColor: '#ff0',
+                    fillOpacity: 0.2
+                  }).addTo(markers);
+
+                  console.log('Request sent to backend ' + request);
+                  console.log('Fetched ' + data.length + ' objects');
+                  for (d in data) {
+                    setupMarker(data[d]).addTo(markers);
+                    console.log(data[d]);
+                  }
+                }
+              });
+            }
+          }
         }
         else if (document.getElementById('uc-paths').checked) {
           console.log('uc-paths');
