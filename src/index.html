@@ -86,7 +86,12 @@
       };
 
       var setupMarker = function(data) {
-        var marker = L.marker([data['lat'], data['lon']]);
+        var icon;
+        if (data['category'] == 'bars') icon = blueIcon;
+        if (data['category'] == 'hotels') icon = redIcon;
+        if (data['category'] == 'restaurants') icon = greenIcon;
+
+        var marker = L.marker([data['lat'], data['lon']], {icon: icon});
         var t = '<dl><dt><b>Name:     </b> ' + data['name'] + '</dt>'
                   + '<dt><b>Category: </b> ' + data['category'] + '</dt>'
                   + '<dt><b>Amenity:  </b> ' + data['amenity'] + '</dt></dl>'
@@ -95,6 +100,10 @@
         return marker;
       };
 
+
+      var greenIcon = L.icon({iconUrl: 'icons/marker-green.png', iconSize: [40, 50]});
+      var blueIcon = L.icon({iconUrl: 'icons/marker-blue.png', iconSize: [40, 50]});
+      var redIcon = L.icon({iconUrl: 'icons/marker-red.png', iconSize: [40, 50]});
 
       var mymap = L.map('mapid').setView([48.1472665, 17.1088840], 15);
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
