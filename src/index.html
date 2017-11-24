@@ -29,14 +29,19 @@
       <input type="checkbox" name="entity-type" id="et-restaurants">Restaurants</input>
     </div>
 
-    <form>
+    <form onsubmit="event.preventDefault()">
       Distance (between 1 and 999 999):
       <input type="number" name="distance" id="param-distance" min="1" max="999999">
     </form>
 
-    <form>
+    <form onsubmit="event.preventDefault()">
       Limit (between 1 and 9 999):
       <input type="number" name="limit" id="param-limit" min="1" max="9999">
+    </form>
+
+    <form onsubmit="event.preventDefault(); findStreet();">
+      Search by street:
+      <input type="text" name="street" id="param-street" onchange="findStreet()" value="Obchodná">
     </form>
 
     <script src="index.js"></script>

@@ -37,6 +37,9 @@ var getParams = function() {
   if (!isNaN(parseInt(document.getElementById('param-limit').value))) {
     tmp += ('&limit=' + parseInt(document.getElementById('param-limit').value));
   }
+  if (document.getElementById('param-street').value) {
+    tmp += ('&street=' + document.getElementById('param-street').value);
+  }
 
   if (tmp == '')
     return '&limit=10';
@@ -57,6 +60,38 @@ var setupMarker = function(data) {
   marker.bindTooltip(t).openTooltip();
   return marker;
 };
+
+var findStreet = function(event) {
+  console.log(document.getElementById('param-street').value);
+  var amenities = getAmenities();
+  if (amenities != '') {
+    var request = 'http://127.0.0.1:3000/api/streets?' + amenities + '&lat=48.1475394803097&lon=17.1105918328104' + getParams();
+    getJSON(request,
+    function(err, data) {
+      if (err !== null) {
+        console.log('Error occurred during getting response from nodejs: ' + err);
+      } else {
+        markers.clearLayers();
+
+        // if (parseInt(document.getElementById('param-distance').value)) {
+        //   L.circle([e.latlng['lat'], e.latlng['lng']], {
+        //     color: 'yellow',
+        //     fillColor: '#ff0',
+        //     fillOpacity: 0.2,
+        //     radius: parseInt(document.getElementById('param-distance').value)
+        //   }).addTo(markers);
+        // }
+
+        console.log('Request sent to backend ' + request);
+        console.log('Fetched ' + data.length + ' objects');
+        for (d in data) {
+          setupMarker(data[d]).addTo(markers);
+          // console.log(data[d]);
+        }
+      }
+    });
+  }
+}
 
 
 var greenIcon = L.icon({iconUrl: 'icons/marker-green.png', iconSize: [40, 50], iconAnchor: [20, 50], tooltipAnchor: [0, -35]});
