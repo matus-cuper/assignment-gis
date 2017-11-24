@@ -20,8 +20,10 @@ module.exports = router;
 const paths = require('./paths');
 const points = require('./points');
 const rectangles = require('./rectangles');
+const streets = require('./streets');
 
 router.use(cors())
 router.use('/paths', paths);
 router.use('/points', points);
 router.use('/rectangles', rectangles);
+router.use('/streets', streets);
