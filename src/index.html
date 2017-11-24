@@ -101,9 +101,9 @@
       };
 
 
-      var greenIcon = L.icon({iconUrl: 'icons/marker-green.png', iconSize: [40, 50]});
-      var blueIcon = L.icon({iconUrl: 'icons/marker-blue.png', iconSize: [40, 50]});
-      var redIcon = L.icon({iconUrl: 'icons/marker-red.png', iconSize: [40, 50]});
+      var greenIcon = L.icon({iconUrl: 'icons/marker-green.png', iconSize: [40, 50], iconAnchor: [20, 50], tooltipAnchor: [0, -35]});
+      var blueIcon = L.icon({iconUrl: 'icons/marker-blue.png', iconSize: [40, 50], iconAnchor: [20, 50], tooltipAnchor: [0, -35]});
+      var redIcon = L.icon({iconUrl: 'icons/marker-red.png', iconSize: [40, 50], iconAnchor: [20, 50], tooltipAnchor: [0, -35]});
 
       var mymap = L.map('mapid').setView([48.1472665, 17.1088840], 15);
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -116,7 +116,6 @@
 
       var coordinates = [];
       var markers = L.layerGroup().addTo(mymap);
-      var popup = L.popup();
 
       function onMapClick(e) {
 
