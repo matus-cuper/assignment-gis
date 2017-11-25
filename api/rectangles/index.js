@@ -12,14 +12,16 @@ router.get('/', function(req, res, next) {
   const pool = req.app.get('pool');
   const limit = (req.query.limit) ? req.query.limit:9999
 
+
   pool.connect((err, client, done) => {
     if (err) throw err;
-    client.query(sqlQuery, [req.query.lon[0], req.query.lat[0], req.query.lon[1], req.query.lat[1],
+    client.query(sqlQuery, [req.query.lng[0], req.query.lat[0], req.query.lng[1], req.query.lat[1],
       req.query.amenity[0], req.query.amenity[1], req.query.amenity[2],
       limit], (err, result) => {
       done();
 
-      console.log('lon        ' + req.query.lon);
+
+      console.log('lng        ' + req.query.lng);
       console.log('lat        ' + req.query.lat);
       console.log('amenities  ' + req.query.amenity);
       console.log('limit      ' + limit);
@@ -28,7 +30,7 @@ router.get('/', function(req, res, next) {
       var i;
       var r = [];
       for (i in result.rows) {
-        r.push(result.rows[i]);
+        r.push(result.rows[i].geojson);
       }
 
       res.json(r);

@@ -153,7 +153,7 @@ function onMapClick(e) {
     var amenities = getAmenities();
     if (amenities != '' && coordinates.length > 2) {
       {
-        var request = 'http://127.0.0.1:3000/api/rectangles?' + amenities + '&lat[]=' + coordinates[0] + '&lon[]=' + coordinates[1] + '&lat[]=' + coordinates[2] + '&lon[]=' + coordinates[3] + getParams();
+        var request = 'http://127.0.0.1:3000/api/rectangles?' + amenities + '&lat[]=' + coordinates[0] + '&lng[]=' + coordinates[1] + '&lat[]=' + coordinates[2] + '&lng[]=' + coordinates[3] + getParams();
         getJSON(request,
         function(err, data) {
           if (err !== null) {
