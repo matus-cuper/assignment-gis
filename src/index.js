@@ -66,7 +66,7 @@ var findStreet = function(event) {
   currentPosition = mymap.getCenter();
   var amenities = getAmenities();
   if (amenities != '') {
-    var request = 'http://127.0.0.1:3000/api/streets?' + amenities + '&lat=' + currentPosition.lat + '&lon=' + currentPosition.lng + '' + getParams();
+    var request = 'http://127.0.0.1:3000/api/streets?' + amenities + '&lat=' + currentPosition.lat + '&lng=' + currentPosition.lng + '' + getParams();
     getJSON(request,
     function(err, data) {
       if (err !== null) {
@@ -74,7 +74,7 @@ var findStreet = function(event) {
       } else {
         markers.clearLayers();
 
-        mymap.setView([data[0].lat, data[0].lon], 11);
+        mymap.setView([data[0].geometry.coordinates[1], data[0].geometry.coordinates[0]], 17);
 
 
         // if (parseInt(document.getElementById('param-distance').value)) {
