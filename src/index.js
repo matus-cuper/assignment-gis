@@ -48,14 +48,15 @@ var getParams = function() {
 
 var setupMarker = function(data) {
   var icon;
-  if (data['category'] == 'bars') icon = blueIcon;
-  if (data['category'] == 'hotels') icon = redIcon;
-  if (data['category'] == 'restaurants') icon = greenIcon;
+  if (data.properties.category == 'bars') icon = blueIcon;
+  if (data.properties.category == 'hotels') icon = redIcon;
+  if (data.properties.category == 'restaurants') icon = greenIcon;
 
-  var marker = L.marker([data['lat'], data['lon']], {icon: icon});
-  var t = '<dl><dt><b>Name:     </b> ' + data['name'] + '</dt>'
-            + '<dt><b>Category: </b> ' + data['category'] + '</dt>'
-            + '<dt><b>Amenity:  </b> ' + data['amenity'] + '</dt></dl>'
+  var marker = L.marker([data.geometry.coordinates[1], data.geometry.coordinates[0]], {icon: icon});
+  var t = '<dl><dt><b>Name:     </b> ' + data.properties.name + '</dt>'
+            + '<dt><b>Distance: </b> ' + parseFloat(data.properties.distance).toFixed(2) + ' m' + '</dt>'
+            + '<dt><b>Category: </b> ' + data.properties.category + '</dt>'
+            + '<dt><b>Amenity:  </b> ' + data.properties.amenity + '</dt></dl>'
 
   marker.bindTooltip(t).openTooltip();
   return marker;
@@ -118,7 +119,7 @@ function onMapClick(e) {
   if (document.getElementById('uc-points').checked) {
     var amenities = getAmenities();
     if (amenities != '') {
-      var request = 'http://127.0.0.1:3000/api/points?' + amenities + '&lon=' + e.latlng['lng'] + '&lat=' + e.latlng['lat'] + getParams();
+      var request = 'http://127.0.0.1:3000/api/points?' + amenities + '&lat=' + e.latlng['lat'] + '&lng=' + e.latlng['lng'] + getParams();
       getJSON(request,
       function(err, data) {
         if (err !== null) {
