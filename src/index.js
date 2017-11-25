@@ -62,16 +62,19 @@ var setupMarker = function(data) {
 };
 
 var findStreet = function(event) {
-  console.log(document.getElementById('param-street').value);
+  currentPosition = mymap.getCenter();
   var amenities = getAmenities();
   if (amenities != '') {
-    var request = 'http://127.0.0.1:3000/api/streets?' + amenities + '&lat=48.1475394803097&lon=17.1105918328104' + getParams();
+    var request = 'http://127.0.0.1:3000/api/streets?' + amenities + '&lat=' + currentPosition.lat + '&lon=' + currentPosition.lng + '' + getParams();
     getJSON(request,
     function(err, data) {
       if (err !== null) {
         console.log('Error occurred during getting response from nodejs: ' + err);
       } else {
         markers.clearLayers();
+
+        mymap.setView([data[0].lat, data[0].lon], 11);
+
 
         // if (parseInt(document.getElementById('param-distance').value)) {
         //   L.circle([e.latlng['lat'], e.latlng['lng']], {
