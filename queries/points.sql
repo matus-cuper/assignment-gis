@@ -12,7 +12,7 @@ FROM
 (
 	SELECT ST_TRANSFORM(point, 4326) AS point, amenity, category, name,
 	ST_DISTANCE(point, ST_TRANSFORM(ST_GEOMFROMEWKT('SRID=4326;POINT(' || $1 || ' ' || $2 || ')'), 3857)) AS distance
-	FROM amenity_point
+	FROM amenity_points
   WHERE category IN ($3, $4, $5)
 	AND ST_DWITHIN(point, ST_TRANSFORM(ST_GEOMFROMEWKT('SRID=4326;POINT(' || $1 || ' ' || $2 || ')'), 3857), $6)
 	ORDER BY distance

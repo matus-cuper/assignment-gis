@@ -21,7 +21,7 @@ FROM
 	)
 	SELECT DISTINCT ON (a.name) a.amenity, a.category, a.name, t.original_distance, ST_DISTANCE(t.way, a.point) AS distance, ST_TRANSFORM(t.way, 4326) AS way, ST_TRANSFORM(a.point, 4326) AS point
 	FROM t
-	JOIN amenity_point AS a ON ST_DISTANCE(t.way, a.point) < $6
+	JOIN amenity_points AS a ON ST_DISTANCE(t.way, a.point) < $6
 	WHERE a.category IN ($3, $4, $5)
 	ORDER BY a.name, distance
 ) t
