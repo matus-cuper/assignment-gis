@@ -76,21 +76,18 @@ var findStreet = function(event) {
 
         mymap.setView([data[0].geometry.coordinates[1], data[0].geometry.coordinates[0]], 17);
 
-
-        // if (parseInt(document.getElementById('param-distance').value)) {
-        //   L.circle([e.latlng['lat'], e.latlng['lng']], {
-        //     color: 'yellow',
-        //     fillColor: '#ff0',
-        //     fillOpacity: 0.2,
-        //     radius: parseInt(document.getElementById('param-distance').value)
-        //   }).addTo(markers);
-        // }
-
         console.log('Request sent to backend ' + request);
         console.log('Fetched ' + data.length + ' objects');
         for (d in data) {
           setupMarker(data[d]).addTo(markers);
-          // console.log(data[d]);
+          for (c in data[d].properties.street.coordinates) {
+            if (c < data[d].properties.street.coordinates.length - 1) {
+              L.polyline([
+                [data[d].properties.street.coordinates[parseInt(c)][1], data[d].properties.street.coordinates[parseInt(c)][0]],
+                [data[d].properties.street.coordinates[parseInt(c) + 1][1], data[d].properties.street.coordinates[parseInt(c) + 1][0]]
+              ],{color: 'yellow'}).addTo(markers);
+            }
+          }
         }
       }
     });
