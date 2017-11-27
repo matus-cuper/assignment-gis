@@ -18,23 +18,32 @@ router.get('/', function(req, res, next) {
   routingPool.connect((err, client, done) => {
     if (err) throw err;
 		console.log(req.query);
-    client.query(sqlQuery, [req.query.lng[0], req.query.lat[0],
-			req.query.lng[1], req.query.lat[1]], (err, result) => {
-      done();
+		if (Object.keys(req.query).length == 0) {
+			res.json({
+				message: 'Accessing /api/paths route',
+				status: 'OK'
+			});
+			next();
+		}
+		else {
+			client.query(sqlQuery, [req.query.lng[0], req.query.lat[0],
+				req.query.lng[1], req.query.lat[1]], (err, result) => {
+	      done();
 
-			console.log('lng        ' + req.query.lng);
-      console.log('lat        ' + req.query.lat);
-      console.log('Returned ' + result.rowCount + ' rows');
+				console.log('lng        ' + req.query.lng);
+	      console.log('lat        ' + req.query.lat);
+	      console.log('Returned ' + result.rowCount + ' rows');
 
 
-      var i;
-      var r = [];
-      for (i in result.rows) {
-        r.push(result.rows[i].geojson);
-      }
+	      var i;
+	      var r = [];
+	      for (i in result.rows) {
+	        r.push(result.rows[i].geojson);
+	      }
 
-      res.json(r);
-    });
+	      res.json(r);
+	    });
+		}
   });
 });
 
