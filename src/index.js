@@ -195,7 +195,7 @@ function onMapClick(e) {
     var amenities = getAmenities();
     if (amenities != '') {
       { // TODO remove?
-        var requestPoints = 'http://127.0.0.1:3000/api/points?' + amenities + '&lat=' + e.latlng['lat'] + '&lng=' + e.latlng['lng'] + '&limit=1';
+        var requestPoints = 'http://127.0.0.1:3000/api/points?' + amenities + '&lat=' + e.latlng['lat'] + '&lng=' + e.latlng['lng'] + getParams();
         getJSON(requestPoints,
         function(err, data) {
           if (err !== null) {
@@ -204,7 +204,10 @@ function onMapClick(e) {
             if (lastEvent != 'uc-paths') markers.clearLayers();
             console.log('Request sent to backend ' + requestPoints);
             console.log('Fetched ' + data.length + ' objects');
-            setupMarker(data[0]).addTo(markers);
+            for (d in data) {
+              setupMarker(data[d]).addTo(markers);
+              console.log(data[d]);
+            }
           }
         });
 

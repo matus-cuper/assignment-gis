@@ -32,7 +32,7 @@ router.get('/', function(req, res, next) {
 
 				console.log('lng        ' + req.query.lng);
 	      console.log('lat        ' + req.query.lat);
-	      console.log('Returned ' + result.rowCount + ' rows');
+	      console.log('Returned 	' + result.rowCount + ' rows');
 
 
 	      var i;
