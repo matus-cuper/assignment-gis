@@ -46,6 +46,14 @@ var getParams = function() {
   return tmp;
 };
 
+var getCoordinates = function(coordinates) {
+  var tmp = '';
+  for (c in coordinates)
+    tmp += (parseInt(c) % 2) ? ('&lng[]=' + coordinates[c]) : ('&lat[]=' + coordinates[c]);
+
+  return tmp;
+}
+
 var setupMarker = function(data) {
   var icon;
   if (data.properties.category == 'bars') icon = blueIcon;
@@ -109,6 +117,7 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 
 
 var coordinates = [];
+var lastEvent = '';
 var markers = L.layerGroup().addTo(mymap);
 
 function onMapClick(e) {
@@ -142,14 +151,14 @@ function onMapClick(e) {
         }
       });
     }
+    lastEvent = 'uc-points';
   }
   else if (document.getElementById('uc-rectangles').checked) {
     if (coordinates.length > 2) coordinates = [];
     coordinates.push(e.latlng['lat'], e.latlng['lng']);
-    console.log(coordinates);
     var amenities = getAmenities();
     if (amenities != '' && coordinates.length > 2) {
-      {
+      { // TODO remove?
         var request = 'http://127.0.0.1:3000/api/rectangles?' + amenities + '&lat[]=' + coordinates[0] + '&lng[]=' + coordinates[1] + '&lat[]=' + coordinates[2] + '&lng[]=' + coordinates[3] + getParams();
         getJSON(request,
         function(err, data) {
@@ -178,9 +187,59 @@ function onMapClick(e) {
         });
       }
     }
+    lastEvent = 'uc-rectangles';
   }
   else if (document.getElementById('uc-paths').checked) {
-    console.log('uc-paths');
+    if (lastEvent != 'uc-paths') coordinates = [];
+    coordinates.push(e.latlng['lat'], e.latlng['lng']);
+    var amenities = getAmenities();
+    if (amenities != '') {
+      { // TODO remove?
+        var requestPoints = 'http://127.0.0.1:3000/api/points?' + amenities + '&lat=' + e.latlng['lat'] + '&lng=' + e.latlng['lng'] + '&limit=1';
+        getJSON(requestPoints,
+        function(err, data) {
+          if (err !== null) {
+            console.log('Error occurred during getting response from nodejs: ' + err);
+          } else {
+            if (lastEvent != 'uc-paths') markers.clearLayers();
+            console.log('Request sent to backend ' + requestPoints);
+            console.log('Fetched ' + data.length + ' objects');
+            setupMarker(data[0]).addTo(markers);
+          }
+        });
+
+        if (coordinates.length > 2) {
+          if (coordinates.length > 4) {
+            coordinates.shift();
+            coordinates.shift();
+          }
+          var requestPaths = 'http://127.0.0.1:3000/api/paths?' + amenities + getCoordinates(coordinates);
+          getJSON(requestPaths,
+          function(err, data) {
+            if (err !== null) {
+              console.log('Error occurred during getting response from nodejs: ' + err);
+            } else {
+              if (lastEvent != 'uc-paths') markers.clearLayers();
+
+              console.log('Request sent to backend ' + requestPaths);
+              console.log('Fetched ' + data.length + ' objects');
+              for (d in data) {
+                console.log(data[d]);
+                for (c in data[d].coordinates) {
+                  if (c < data[d].coordinates.length - 1) {
+                    L.polyline([
+                      [data[d].coordinates[parseInt(c)][1], data[d].coordinates[parseInt(c)][0]],
+                      [data[d].coordinates[parseInt(c) + 1][1], data[d].coordinates[parseInt(c) + 1][0]]
+                    ],{color: 'yellow'}).addTo(markers);
+                  }
+                }
+              }
+            }
+          });
+        }
+      }
+    }
+    lastEvent = 'uc-paths';
   }
 };
 
