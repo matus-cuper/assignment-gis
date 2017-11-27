@@ -17,13 +17,13 @@ var getJSON = function(url, callback) {
 var getAmenities = function() {
   var tmp = '';
   if (document.getElementById('et-bars').checked) {
-    tmp += '&amenity[]=bars';
+    tmp += (tmp == '') ? 'amenity[]=bars' : '&amenity[]=bars';
   }
   if (document.getElementById('et-hotels').checked) {
-    tmp += '&amenity[]=hotels';
+    tmp += (tmp == '') ? 'amenity[]=hotels' : '&amenity[]=hotels';
   }
   if (document.getElementById('et-restaurants').checked) {
-    tmp += '&amenity[]=restaurants';
+    tmp += (tmp == '') ? 'amenity[]=restaurants' : '&amenity[]=restaurants';
   }
 
   return tmp;
@@ -190,7 +190,10 @@ function onMapClick(e) {
     lastEvent = 'uc-rectangles';
   }
   else if (document.getElementById('uc-paths').checked) {
-    if (lastEvent != 'uc-paths') coordinates = [];
+    if (lastEvent != 'uc-paths') {
+      coordinates = [];
+      markers.clearLayers();
+    }
     coordinates.push(e.latlng['lat'], e.latlng['lng']);
     var amenities = getAmenities();
     if (amenities != '') {
