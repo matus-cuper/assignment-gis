@@ -129,7 +129,7 @@ function onMapClick(e) {
               color: 'yellow',
               fillColor: '#ff0',
               fillOpacity: 0.2,
-              radius: parseInt(document.getElementById('param-distance').value)
+              radius: parseInt(document.getElementById('param-distance').value) * 1/Math.sqrt(2)
             }).addTo(markers);
           }
 
