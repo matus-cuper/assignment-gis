@@ -20,8 +20,8 @@ Build a map-based application, which lets the user see geo-based data on a map a
 
 Fill in (either in English, or in Slovak):
 
-**Application description**: `<fill in>`
+**Application description**: `Application finds points of interests (such as bars, hotels or restaurants) around selected point on map. User also can select area, in which he wants display points of interests. Application also can find nearest street with given name or shortest path between selected points`
 
-**Data source**: `<fill in>`
+**Data source**: `[OpenStreetMap Slovakia - downloaded on 3rd October](http://download.geofabrik.de/europe/slovakia.html)`
 
-**Technologies used**: `<fill in>`
+**Technologies used**: `Mapbox, javascript, GeoJSON, PostGIS, Node.js, pgRouting, Leaflet`
