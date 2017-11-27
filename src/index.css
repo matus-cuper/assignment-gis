@@ -1,3 +1,38 @@
 #mapid {
-  height: 640px;
+  height: 800px;
+}
+
+.inputs-forms {
+  margin-top: 7px;
+  margin-left: 25px
+}
+
+.inputs-checkboxes {
+  display: inline-block;
+  margin-top: 15px;
+  margin-left: 450px;
+  margin-right: 400px;
+}
+
+.inputs-radiobuttons {
+  display: inline-block;
+  margin-top: 15px;
+}
+
+.inputs-radiobuttons {
+  margin-left: 25px
+}
+
+#form-distance {
+  display: inline-block;
+}
+
+#form-limit {
+  display: inline-block;
+  margin-left: 200px;
+}
+
+#form-street {
+  display: inline-block;
+  margin-left: 250px;
 }

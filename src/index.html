@@ -17,32 +17,35 @@
 
     <div id="mapid"></div>
 
-    <form action="">
-      <input type="radio" name="use-case" id="uc-points" checked>Points</input>
-      <input type="radio" name="use-case" id="uc-rectangles">Rectangles</input>
-      <input type="radio" name="use-case" id="uc-paths">Paths</input>
-    </form>
+    <div class="inputs-forms">
+      <form id="form-distance" onsubmit="event.preventDefault()">
+        Distance (between 1 and 999 999): <input type="number" name="distance" id="param-distance" min="1" max="999999" value="100">
+      </form>
 
-    <div class="checkbox-group required">
-      <input type="checkbox" name="entity-type" id="et-bars">Bars</input>
-      <input type="checkbox" name="entity-type" id="et-hotels" checked>Hotels</input>
-      <input type="checkbox" name="entity-type" id="et-restaurants" checked>Restaurants</input>
+      <form id="form-limit" onsubmit="event.preventDefault()">
+        Limit (between 1 and 9 999): <input type="number" name="limit" id="param-limit" min="1" max="9999" value="25">
+      </form>
+
+      <form id="form-street" onsubmit="event.preventDefault(); findStreet();">
+        Search by street: <input type="text" name="street" id="param-street" onchange="findStreet()" value="Obchodná">
+      </form>
     </div>
 
-    <form onsubmit="event.preventDefault()">
-      Distance (between 1 and 999 999):
-      <input type="number" name="distance" id="param-distance" min="1" max="999999" value="100">
-    </form>
+    <div class="inputs-checkboxes">
+      <div id="checkbox-entity" class="checkbox-group required">
+        <input type="checkbox" name="entity-type" id="et-bars">Bars</input>
+        <input type="checkbox" name="entity-type" id="et-hotels" checked>Hotels</input>
+        <input type="checkbox" name="entity-type" id="et-restaurants" checked>Restaurants</input>
+      </div>
+    </div>
 
-    <form onsubmit="event.preventDefault()">
-      Limit (between 1 and 9 999):
-      <input type="number" name="limit" id="param-limit" min="1" max="9999" value="25">
-    </form>
-
-    <form onsubmit="event.preventDefault(); findStreet();">
-      Search by street:
-      <input type="text" name="street" id="param-street" onchange="findStreet()" value="Obchodná">
-    </form>
+    <div class="inputs-radiobuttons">
+      <form id="radiobutton-usecase" action="">
+        <input type="radio" name="use-case" id="uc-points" checked>Points</input>
+        <input type="radio" name="use-case" id="uc-rectangles">Rectangles</input>
+        <input type="radio" name="use-case" id="uc-paths">Paths</input>
+      </form>
+    </div>
 
     <script src="index.js"></script>
   </body>
